@@ -4,8 +4,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import AddContacts from './components/AddContact/AddContacts';
 import Registration from './components/Registration/Registration';
 import Login from './components/Login/Login';
-import Room from './components/Room/Room';
-import RoomLogin from './components/Room/RoomLogin';
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
