@@ -6,7 +6,7 @@ import Registration from './components/Registration/Registration';
 import Login from './components/Login/Login';
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(null); // null = loading state
     const [emailLogin, setEmailLogin] = useState('');
 
     useEffect(() => {
@@ -16,8 +16,14 @@ function App() {
         if (storedLogin === "true" && storedEmail) {
             setIsLoggedIn(true);
             setEmailLogin(storedEmail);
+        } else {
+            setIsLoggedIn(false);
         }
     }, []);
+
+    if (isLoggedIn === null) {
+        return <div>Loading...</div>; // Prevents routing until state is restored
+    }
 
     return (
         <Routes>
@@ -30,6 +36,7 @@ function App() {
                             setIsLoggedIn(true);
                             const email = localStorage.getItem("emailLogin");
                             setEmailLogin(email);
+                            localStorage.setItem("isLoggedIn", "true");
                         }}
                         setEmailLogin={(email) => {
                             setEmailLogin(email);
@@ -39,8 +46,14 @@ function App() {
                 }
             />
             <Route
-                path="/contact/:emailLogin"
-                element={isLoggedIn ? <AddContacts emailLogin={emailLogin} /> : <Navigate to="/login" />}
+                path="/contact"
+                element={
+                    isLoggedIn ? (
+                        <AddContacts emailLogin={emailLogin} />
+                    ) : (
+                        <Navigate to="/login" replace />
+                    )
+                }
             />
             <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
