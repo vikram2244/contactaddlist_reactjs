@@ -9,7 +9,7 @@ import React from 'react';
 import Button from '../Buttons/Button';
 import { Link } from 'react-router-dom';
 
-export default function SelectedProject({ project, onDelete }) {
+export default function SelectedProject({ project, onDelete,onEdit }) {
 if (!project) {
 return <p>No project selected</p>;
 }

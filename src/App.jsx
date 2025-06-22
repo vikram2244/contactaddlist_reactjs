@@ -28,15 +28,6 @@ function App() {
                 element={isLoggedIn ? <AddContacts emailLogin={emailLogin} /> : <Navigate to="/login" />}
             />
 
-            <Route
-                path="/videocall"
-                element={isLoggedIn ? <RoomLogin /> : <Navigate to="/login" />}
-            />
-            <Route
-                path="/room/:roomID"
-                element={isLoggedIn ? <Room /> : <Navigate to="/login" />}
-            />
-
             <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
         </>

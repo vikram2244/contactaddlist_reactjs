@@ -1,3 +1,4 @@
+// AddContacts.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
@@ -15,23 +16,36 @@ function AddContacts({ emailLogin }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchContacts() {
-      try {
-        setLoading(true);
-        const response = await axios.get(`http://localhost:8080/api/contacts/${emailLogin}`);
-        if (response.status === 200) {
-          setProjectsState((prevState) => ({
-            ...prevState,
-            projects: response.data,
-          }));
-        }
-      } catch (err) {
-        setError('Failed to fetch contacts. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    }
-
+  async function fetchContacts() {
+  try {
+    setLoading(true);
+    const response = await axios.get(
+      `https://contactaddlist-springboot.onrender.com/api/contacts/${encodeURIComponent(emailLogin)}`
+    );
+    
+    console.log('Received contacts:', response.data);
+    
+    // Ensure we're working with an array
+    const projectsArray = Array.isArray(response.data) ? response.data : [];
+    
+    setProjectsState((prevState) => ({
+      ...prevState,
+      projects: projectsArray.map(project => ({
+        id: project.id,
+        name: project.name,
+        phone_number: project.phone_Number, // Note the mapping from phone_Number to phone_number
+        email: project.email,
+        date: project.date
+      })),
+      selectedProjectId: undefined
+    }));
+  } catch (err) {
+    console.error('Fetch error:', err);
+    setError('Failed to fetch contacts. Please try again later.');
+  } finally {
+    setLoading(false);
+  }
+}
     if (emailLogin) fetchContacts();
   }, [emailLogin]);
 
@@ -46,42 +60,47 @@ function AddContacts({ emailLogin }) {
 
   const handleAddProject = async (projectData) => {
     const newProject = { ...projectData, id: uuidv4() };
-    console.log(newProject.id);
     try {
-      const response = await axios.post(`http://localhost:8080/api/addcontacts/${emailLogin}`, newProject);
+      const response = await axios.post(
+        `https://contactaddlist-springboot.onrender.com/api/addcontacts/${encodeURIComponent(emailLogin)}`,
+        newProject
+      );
+      console.log('Add project response:', response.data);
       if (response.status === 201) {
         setProjectsState((prev) => ({
           ...prev,
           selectedProjectId: undefined,
-          projects: [...prev.projects, newProject],
+          projects: [...prev.projects, response.data || newProject], // Use back-end response if available
         }));
       }
     } catch (err) {
-      setError('Failed to add project. Please try again.');
+      console.error('Add project error:', err);
+      setError(`Failed to add project: ${err.message}. Please try again.`);
     }
   };
 
   const handleDeleteProject = async () => {
     const { selectedProjectId } = projectsState;
-    console.log(selectedProjectId);
-    console.log(projectsState);
     if (!selectedProjectId) return;
 
     try {
-      await axios.delete(`http://localhost:8080/api/contacts/${selectedProjectId}`);
+      await axios.delete(
+        `https://contactaddlist-springboot.onrender.com/api/contacts/${selectedProjectId}`
+      );
       setProjectsState((prev) => ({
         ...prev,
         selectedProjectId: undefined,
         projects: prev.projects.filter((project) => project.id !== selectedProjectId),
       }));
     } catch (err) {
-      setError('Failed to delete project. Please try again.');
+      console.error('Delete project error:', err);
+      setError(`Failed to delete project: ${err.message}. Please try again.`);
     }
   };
 
-  const selectedProject = projectsState.projects.find(
-    (project) => project.id === projectsState.selectedProjectId
-  );
+  const selectedProject = Array.isArray(projectsState.projects) 
+  ? projectsState.projects.find((project) => project.id === projectsState.selectedProjectId)
+  : null;
 
   let content;
   if (loading) {
@@ -97,7 +116,6 @@ function AddContacts({ emailLogin }) {
   }
 
   return (
-    <>    
     <main className="h-screen my-8 flex gap-8">
       <ProjectsSidebar
         onStartAddProject={handleStartAddProject}
@@ -107,7 +125,6 @@ function AddContacts({ emailLogin }) {
       />
       {content}
     </main>
-    </>
   );
 }
 

@@ -58,7 +58,7 @@ function Registration() {
 
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/register',
+        'https://contactaddlist-springboot.onrender.com/api/register',
         { fName, lName, email, dept, dob, password, collegeName, regNo, state, country },
         { withCredentials: true }
       );
