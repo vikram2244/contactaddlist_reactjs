@@ -27,8 +27,6 @@ function App() {
                 path="/contact/:emailLogin"
                 element={isLoggedIn ? <AddContacts emailLogin={emailLogin} /> : <Navigate to="/login" />}
             />
-
-            <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
         </>
     );

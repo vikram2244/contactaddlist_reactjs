@@ -1,3 +1,4 @@
+// ProjectsSidebar.jsx
 import React from 'react';
 import Button from '../Buttons/Button';
 import { Link } from 'react-router-dom';
@@ -9,16 +10,16 @@ export default function ProjectsSidebar({
   selectedProjectId,
 }) {
   return (
-    <aside className="w-full md:w-72 bg-stone-900 text-stone-50 px-4 md:px-8 py-8 md:py-16 rounded-xl md:rounded-r-xl fixed md:static top-0 left-0 h-screen md:h-auto z-10">
-      <h2 className="mb-6 md:mb-8 font-bold uppercase text-lg md:text-xl text-stone-200">Contacts</h2>
+    <aside className="w-1/3 px-8 py-16 bg-stone-900 text-stone-50 md:w-72 rounded-r-xl absolute">
+      <h2 className="mb-8 font-bold uppercase md:text-xl text-stone-200 bg-black">Contacts</h2>
       <div>
         <Button onClick={onStartAddProject}>+ Add Contact</Button>
       </div>
-      <ul className="mt-6 md:mt-8 max-h-[60vh] overflow-y-auto">
+      <ul className="mt-8 max-h-[70vh] overflow-y-auto">
         {(projects || []).map((project, index) => {
-          const projectId = project.id || `temp-id-${index}`;
+          const projectId = project.id || `temp-id-${index}`; // Fallback ID
           let cssClasses =
-            'w-full text-left px-2 py-2 md:py-3 rounded-sm my-1 hover:text-stone-200 hover:bg-stone-800 text-sm md:text-base';
+            'w-full text-left px-2 py-3 rounded-sm my-1 hover:text-stone-200 hover:bg-stone-800';
           if (projectId === selectedProjectId) {
             cssClasses += ' bg-stone-800 text-stone-200';
           } else {
@@ -33,7 +34,7 @@ export default function ProjectsSidebar({
           );
         })}
       </ul>
-      <div className="mt-8 md:mt-52 flex justify-center md:justify-start">
+      <div className="mt-52 ml-20 relative">
         <Link className="text-black" to="/login">
           <Button>Logout</Button>
         </Link>
