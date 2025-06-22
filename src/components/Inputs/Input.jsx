@@ -1,27 +1,34 @@
-import React from 'react'
+import React from 'react';
 import { forwardRef } from 'react';
 
-const Input = forwardRef(function Input({ label, id,error,textarea, ...props}, ref) {
-  const classes =
-    'w-full p-1 border-b-2 rounded-sm border-stone-300 bg-stone-200 text-stone-600 focus:outline-none focus:border-stone-600';
+const Input = forwardRef(function Input({ label, id, error, textarea, ...props }, ref) {
+  const baseClasses = "block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm md:text-base";
+  const inputClasses = `${baseClasses} ${textarea ? 'h-24 md:h-32' : 'h-8 md:h-10'} ${error ? 'border-red-500' : 'border'}`;
 
   return (
-    <>
-    <div className="flex flex-col gap my-2 m-5">
-      <label className="text-sm font-bold uppercase text-stone-500">
+    <div className="space-y-1">
+      <label htmlFor={id} className="block text-sm md:text-base font-medium text-gray-700">
         {label}
       </label>
       {textarea ? (
-        <textarea ref={ref} className={classes} {...props} />
+        <textarea
+          ref={ref}
+          id={id}
+          className={inputClasses}
+          {...props}
+        />
       ) : (
-        <input ref={ref} className={classes} id={id} {...props} 
+        <input
+          ref={ref}
+          id={id}
+          className={inputClasses}
+          {...props}
         />
       )}
-    <div className='text-red-800'>
-      {error && <p>{error}</p>}
+      {error && (
+        <p className="mt-1 text-sm text-red-600">{error}</p>
+      )}
     </div>
-    </div>
-    </>
   );
 });
 
