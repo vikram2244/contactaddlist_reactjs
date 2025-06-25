@@ -25,7 +25,6 @@ function AddContacts({ emailLogin }) {
     
     console.log('Received contacts:', response.data);
     
-    // Ensure we're working with an array
     const projectsArray = Array.isArray(response.data) ? response.data : [];
     
     setProjectsState((prevState) => ({
@@ -33,7 +32,7 @@ function AddContacts({ emailLogin }) {
       projects: projectsArray.map(project => ({
         id: project.id,
         name: project.name,
-        phone_number: project.phone_Number, // Note the mapping from phone_Number to phone_number
+        phone_number: project.phone_Number, 
         email: project.email,
         date: project.date
       })),
@@ -70,7 +69,7 @@ function AddContacts({ emailLogin }) {
         setProjectsState((prev) => ({
           ...prev,
           selectedProjectId: undefined,
-          projects: [...prev.projects, response.data || newProject], // Use back-end response if available
+          projects: [...prev.projects, response.data || newProject], 
         }));
       }
     } catch (err) {
