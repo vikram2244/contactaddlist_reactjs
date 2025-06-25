@@ -35,7 +35,7 @@ export default function SelectedProject({ project, onDelete, onEdit }) {
           {project.date || 'No Date Provided'}
         </p>
         <h2 className="text-black">
-          {project.phone_Number || 'No Phone Number Provided'}
+          {project.phone_Number}
         </h2>
       </header>
     </div>
